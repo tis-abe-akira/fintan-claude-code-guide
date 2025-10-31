@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.taskapi.mapper.TaskMapper">
+
+    <!-- Result Map -->
+    <resultMap id="taskResultMap" type="com.example.taskapi.entity.Task">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="completed" column="completed"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- 全てのタスクを取得 -->
+    <select id="findAll" resultMap="taskResultMap">
+        SELECT id, title, description, completed, created_at, updated_at
+        FROM tasks
+    </select>
+
+    <!-- IDでタスクを取得 -->
+    <select id="findById" resultMap="taskResultMap">
+        SELECT id, title, description, completed, created_at, updated_at
+        FROM tasks
+        WHERE id = #{id}
+    </select>
+
+    <!-- タスクを作成 -->
+    <insert id="insert" parameterType="com.example.taskapi.entity.Task"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tasks (title, description, completed, created_at, updated_at)
+        VALUES (#{title}, #{description}, #{completed}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <!-- タスクを更新 -->
+    <update id="update" parameterType="com.example.taskapi.entity.Task">
+        UPDATE tasks
+        SET title = #{title},
+            description = #{description},
+            completed = #{completed},
+            updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+    <!-- タスクを削除 -->
+    <delete id="deleteById">
+        DELETE FROM tasks
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 完了状態でタスクを検索 -->
+    <select id="findByCompleted" resultMap="taskResultMap">
+        SELECT id, title, description, completed, created_at, updated_at
+        FROM tasks
+        WHERE completed = #{completed}
+    </select>
+
+    <!-- タイトルで部分一致検索 -->
+    <select id="findByTitleContaining" resultMap="taskResultMap">
+        SELECT id, title, description, completed, created_at, updated_at
+        FROM tasks
+        WHERE title LIKE CONCAT('%', #{title}, '%')
+    </select>
+
+    <!-- 作成日時で並び替えて全タスクを取得（降順） -->
+    <select id="findAllOrderByCreatedAtDesc" resultMap="taskResultMap">
+        SELECT id, title, description, completed, created_at, updated_at
+        FROM tasks
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 作成日時で並び替えて全タスクを取得（昇順） -->
+    <select id="findAllOrderByCreatedAtAsc" resultMap="taskResultMap">
+        SELECT id, title, description, completed, created_at, updated_at
+        FROM tasks
+        ORDER BY created_at ASC
+    </select>
+
+</mapper>
