@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.productimport.mapper.ProductMapper">
+
+    <!-- 商品マスターのResultMap -->
+    <resultMap id="ProductMasterResultMap" type="com.example.productimport.entity.ProductMaster">
+        <id property="productId" column="product_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="manufacturer" column="manufacturer"/>
+        <result property="modelNumber" column="model_number"/>
+        <result property="productName" column="product_name"/>
+        <result property="description" column="description"/>
+        <result property="photo" column="photo"/>
+        <result property="price" column="price"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- 型番と適用開始日で商品を検索（ユニークキー検索） -->
+    <select id="findByModelNumberAndStartDate" resultMap="ProductMasterResultMap">
+        SELECT
+            product_id,
+            category_name,
+            manufacturer,
+            model_number,
+            product_name,
+            description,
+            photo,
+            price,
+            start_date,
+            end_date,
+            created_at,
+            updated_at
+        FROM product_master
+        WHERE model_number = #{modelNumber}
+          AND start_date = #{startDate}
+    </select>
+
+    <!-- 商品マスター新規登録 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="productId">
+        INSERT INTO product_master (
+            category_name,
+            manufacturer,
+            model_number,
+            product_name,
+            description,
+            photo,
+            price,
+            start_date,
+            end_date
+        ) VALUES (
+            #{categoryName},
+            #{manufacturer},
+            #{modelNumber},
+            #{productName},
+            #{description},
+            #{photo},
+            #{price},
+            #{startDate},
+            #{endDate}
+        )
+    </insert>
+
+    <!-- 商品マスター更新 -->
+    <update id="update">
+        UPDATE product_master
+        SET
+            category_name = #{categoryName},
+            manufacturer = #{manufacturer},
+            product_name = #{productName},
+            description = #{description},
+            photo = #{photo},
+            price = #{price},
+            end_date = #{endDate},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE model_number = #{modelNumber}
+          AND start_date = #{startDate}
+    </update>
+
+</mapper>

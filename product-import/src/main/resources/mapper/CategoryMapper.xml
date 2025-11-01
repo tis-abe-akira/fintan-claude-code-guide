@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.productimport.mapper.CategoryMapper">
+
+    <!-- カテゴリーマスターのResultMap -->
+    <resultMap id="CategoryMasterResultMap" type="com.example.productimport.entity.CategoryMaster">
+        <id property="categoryId" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+    </resultMap>
+
+    <!-- カテゴリー名の存在チェック -->
+    <select id="existsByName" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM category_master
+        WHERE category_name = #{categoryName}
+    </select>
+
+    <!-- カテゴリー名でカテゴリーを検索 -->
+    <select id="findByName" resultMap="CategoryMasterResultMap">
+        SELECT
+            category_id,
+            category_name
+        FROM category_master
+        WHERE category_name = #{categoryName}
+    </select>
+
+</mapper>
