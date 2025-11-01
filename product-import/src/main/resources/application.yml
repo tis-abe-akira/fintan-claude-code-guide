@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: product-import
+
+  datasource:
+    url: jdbc:h2:mem:batchdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    jdbc-type-for-null: NULL
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.example.productimport.entity
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.example.productimport: INFO
+    org.springframework.batch: INFO
+    org.mybatis: DEBUG
