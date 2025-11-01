@@ -114,3 +114,6 @@ spring-boot-devtools.properties
 # Application specific
 application-local.properties
 application-local.yml
+
+# tmp-dir
+tmp/
